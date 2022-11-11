@@ -1,0 +1,42 @@
+{
+  "name": "@mayahq/maya-red-web-extract",
+  "version": "1.0.0",
+  "description": "Webpage content extraction module for Maya",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mayahq/maya-red-web-extract.git"
+  },
+  "author": "shubham-root",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mayahq/mayadev/issues"
+  },
+  "homepage": "https://github.com/mayahq/maya-red-web-extract#readme",
+  "dependencies": {
+    "@mayahq/module-sdk": "file:../module-sdk",
+    "follow-redirects": "^1.15.2",
+    "unfluff": "^3.2.0"
+  },
+  "nodepath": "src/nodes",
+  "nodeRedModuleName": "maya-red-web-extract",
+  "node-red": {
+    "nodes": {
+      "extract": "src/nodes/extract/extract.node.js"
+    }
+  },
+  "mayaDetails": {
+    "name": "maya-red-web-extract",
+    "version": "1.0.0",
+    "description": "Webpage content extraction module for Maya",
+    "author": "shubham-root",
+    "type": "npm",
+    "needsUserProfile": false,
+    "thumbnail": "",
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/mayahq/maya-red-web-extract.git"
+    }
+  }
+}

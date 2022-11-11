@@ -1,0 +1,193 @@
+<script type='text/javascript'>
+    RED.nodes.registerType("extract", {
+        category: "Maya Red Web Extract",
+        color: "#8BBDD9",
+        defaults: {
+            name: {
+                value: ""
+            },
+            isProfileConfigNode: {
+                value: false
+            },
+            options: {
+                value: [{
+                    "url": "",
+                    "payloadTypeurl": ""
+                }],
+                required: true
+            },
+            failOnAnyError: {
+                value: "false",
+                required: false
+            },
+            payloadTypefailOnAnyError: {
+                value: "bool"
+            },
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: "fa-file-code-o.png",
+        label: function() {
+            return this.name || "extract"
+        },
+        paletteLabel: "extract",
+        exportable: true,
+        oneditprepare: function() {
+
+            function generateOption(i, option) {
+                var container = $("<li/>", {
+                    style: "margin:0; padding:8px 0px 0px; border-bottom:1px solid #ccc;",
+                });
+                var row = $("<div/>").appendTo(container);
+
+                $(
+                    '<i style="cursor:move; margin-left:3px;" class="node-input-option-handle fa fa-bars"></i>'
+                ).appendTo(row);
+
+                $("<input/>", {
+                    class: "node-input-option-url",
+                    value: option.url,
+                }).appendTo(row).typedInput({
+                    default: "msg",
+                    types: ["str", "msg", "flow", "global"],
+                    typeField: "node-input-option-payloadTypeurl"
+                }).typedInput("type", option.payloadTypeurl)
+
+
+                var finalspan = $("<div/>", {
+                    style: "display:inline-block; width:5%;",
+                }).appendTo(row);
+                var deleteButton = $("<a/>", {
+                    href: "#",
+                    class: "editor-button",
+                    style: "font-size:1.3em; left:45%; position:relative;",
+                }).appendTo(finalspan);
+                $("<i/>", {
+                    class: "fa fa-trash-o"
+                }).appendTo(deleteButton);
+
+                deleteButton.click(function() {
+                    container.find(".node-input-option-url").removeAttr("required");
+                    container.css({
+                        background: "#fee"
+                    });
+                    container.fadeOut(100, function() {
+                        $(this).remove();
+                    });
+                });
+
+                $("#node-input-option-container").append(container);
+            }
+
+            $("#node-input-add-option").click(function() {
+                generateOption(
+                    $("#node-input-option-container").children().length + 1, {}
+                );
+                $("#node-input-option-container-div").scrollTop(
+                    $("#node-input-option-container-div").get(0).scrollHeight);
+            });
+
+            for (var i = 0; i < this.options.length; i++) {
+                var option = this.options[i];
+                generateOption(i + 1, option);
+            }
+
+            $("#node-input-option-container").sortable({
+                axis: "y",
+                handle: ".node-input-option-handle",
+                cursor: "move",
+            });
+
+
+            if (this.payloadTypefailOnAnyError === null) {
+                if (this.failOnAnyError === "") {
+                    this.payloadTypefailOnAnyError = "date"
+                } else {
+                    this.payloadTypefailOnAnyError = "bool"
+                }
+            } else if (this.payloadTypefailOnAnyError === 'string' || this.payloadTypefailOnAnyError === 'none') {
+                this.payloadTypefailOnAnyError = "bool"
+            }
+
+            $("#node-input-payloadTypefailOnAnyError").val(this.payloadTypefailOnAnyError)
+            $("#node-input-failOnAnyError").typedInput({
+                default: "bool",
+                typeField: $("#node-input-payloadTypefailOnAnyError"),
+                types: ["bool"]
+            })
+            $("#node-input-failOnAnyError").typedInput("type", this.payloadTypefailOnAnyError)
+
+        },
+        oneditsave: function() {
+            var options = $("#node-input-option-container").children();
+            var node = this;
+            node.options = [];
+            options.each(function(i) {
+                var option = $(this);
+                var o = {
+                    payloadTypeurl: option.children().children(".node-input-option-url").typedInput('type'),
+                    url: option.children().children(".node-input-option-url").typedInput('value'),
+                };
+                node.options.push(o);
+            })
+
+        },
+        oneditcancel: function() {},
+        oneditdelete: function() {},
+        oneditresize: function() {},
+        onpaletteadd: function() {},
+        onpaletteremove: function() {}
+    });
+</script>
+
+<script type="text/html" data-template-name="extract">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" style="width:70%;" placeholder="Name" />
+    </div>
+    <div class="form-row node-input-option-container-row" style="margin-bottom:0px; width:100%; min-width:520px">
+        <label style="vertical-align:top;"><i class="fa fa-list-alt"></i> options</label>
+        <div style="display:inline-block; width:78%; border:1px solid #ccc; border-radius:5px; box-sizing:border-box;">
+            <div id="node-input-option-container-div" style=" height: 257px; padding: 5px; overflow-y:scroll;">
+                <ol id="node-input-option-container" style=" list-style-type:none; margin: 0;"></ol>
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <a href="#" class="editor-button editor-button-small" id="node-input-add-option" style="margin-top: 4px; margin-left: 103px;"><i class="fa fa-plus"></i> <span>element</span></a>
+    </div>
+    <div class="form-row">
+        <div class="form-row">
+            <label for="node-input-failOnAnyError">Fail On Any Error</label>
+            <input type="text" id="node-input-failOnAnyError"></input>
+            <input type="hidden" id="node-input-payloadTypefailOnAnyError">
+        </div>
+</script>
+
+<script type="text/html" data-help-name="extract">
+    <h2>Description</h2>
+    <p>Query opens tabs based on criteria like URL, muted status</p>
+
+    <h2>Config</h2>
+    <dl class="message-properties">
+
+        <dt>payload<span class="property-type">various</span></dt>
+        <dd>The configured payload of the message.</dd>
+
+        <dt class="optional">topic <span class="property-type">string</span></dt>
+        <dd>An optional property</dd>
+
+    </dl>
+
+
+    <h2>Outputs</h2>
+    <dl class="message-properties">
+
+        <dt>payload<span class="property-type">various</span></dt>
+        <dd>The configured payload of the message.</dd>
+
+        <dt class="optional">topic <span class="property-type">string</span></dt>
+        <dd>An optional property</dd>
+
+    </dl>
+</script>
