@@ -8,6 +8,24 @@ const https = require('follow-redirects').https;
 const url = require('url');
 const unfluff = require('unfluff');
 
+const DEFAULT_PARSE = {
+    title: "",
+    softTitle: "",
+    date: "",
+    copyright: "",
+    author: "",
+    publisher: "",
+    text: "",
+    image: "",
+    videos: "",
+    tags: "",
+    canonicalLink: "",
+    lang: "",
+    description: "",
+    favicon: "",
+    links: ""
+}
+
 const makeHttpCall = async (options) => {
 	return new Promise((resolve) => {
 		var req = https.request(options, res => {
@@ -84,18 +102,21 @@ class Extract extends Node {
         // Handle the message. The returned value will
         // be sent as the message to any further nodes.
         let urls = vals.options;
-        console.log("🚀 ~ file: extract.schema.js ~ line 87 ~ Extract ~ onMessage ~ urls", urls)
         msg.payload["webExtract"] = []
         const errors = [];
         for(let index = 0; index < urls.length; index++) {
             this.setStatus('PROGRESS', 'Requesting '+ urls[index].url);
             try{
-                let results = await getText(urls[index].url);
-                msg.payload["webExtract"].push(results);
-                this.setStatus("SUCCESS", `Parsed`);
+                if(/^(http(s):\/\/.)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/g.test(urls[index])) {
+                    let results = await getText(urls[index].url);
+                    msg.payload["webExtract"].push(results);
+                    this.setStatus("SUCCESS", `Parsed`);
+                } {
+                    msg.payload["webExtract"].push(DEFAULT_PARSE)
+                }
             } catch (error){
                 this.setStatus.status("PROGRESS", 'error - ' + urls[index].url);
-                msg.payload["webExtract"].push({ error: "parse_error"})
+                msg.payload["webExtract"].push({ ...DEFAULT_PARSE, error: "parse_error"})
                 errors.push(error.description)
                 this.setStatus("ERROR", error.description);
             }
