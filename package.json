@@ -1,6 +1,6 @@
 {
   "name": "@mayahq/maya-red-web-extract",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Webpage content extraction module for Maya",
   "main": "index.js",
   "scripts": {},
