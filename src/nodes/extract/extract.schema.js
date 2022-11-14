@@ -114,7 +114,7 @@ class Extract extends Node {
                     let results = await getText(urls[index].url);
                     msg.payload["webExtract"].push(results);
                     this.setStatus("SUCCESS", `Parsed`);
-                } {
+                } else {
                     msg.payload["webExtract"].push(DEFAULT_PARSE)
                 }
             } catch (error){
