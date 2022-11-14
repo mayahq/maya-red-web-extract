@@ -1,6 +1,6 @@
 {
   "name": "@mayahq/maya-red-web-extract",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Webpage content extraction module for Maya",
   "main": "index.js",
   "scripts": {},
@@ -15,7 +15,7 @@
   },
   "homepage": "https://github.com/mayahq/maya-red-web-extract#readme",
   "dependencies": {
-    "@mayahq/module-sdk": "file:../module-sdk",
+    "@mayahq/module-sdk": "^2.2.7",
     "follow-redirects": "^1.15.2",
     "unfluff": "^3.2.0"
   },
