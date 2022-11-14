@@ -11,19 +11,20 @@ const unfluff = require('unfluff');
 const DEFAULT_PARSE = {
     title: "",
     softTitle: "",
-    date: "",
-    copyright: "",
-    author: "",
-    publisher: "",
+    date: null,
+    copyright: null,
+    description: undefined,
+    author: [],
+    publisher: null,
     text: "",
-    image: "",
-    videos: "",
-    tags: "",
-    canonicalLink: "",
-    lang: "",
+    image: null,
+    videos: [],
+    tags: [],
+    canonicalLink: undefined,
+    lang: null,
     description: "",
-    favicon: "",
-    links: ""
+    favicon: undefined,
+    links: []
 }
 
 const makeHttpCall = async (options) => {
