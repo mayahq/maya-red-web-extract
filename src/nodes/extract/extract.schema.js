@@ -91,6 +91,9 @@ class Extract extends Node {
             }),
             failOnAnyError: new fields.Typed({type: "bool", allowedTypes: ["bool"], "defaultVal": "false", displayName: "Fail On Any Error"})
         },
+        color: "#F82B60",
+        exportable: true,
+        icon: "extract.png"
 
     })
 

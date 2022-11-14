@@ -1,7 +1,7 @@
 <script type='text/javascript'>
     RED.nodes.registerType("extract", {
         category: "Maya Red Web Extract",
-        color: "#8BBDD9",
+        color: "#F82B60",
         defaults: {
             name: {
                 value: ""
@@ -26,7 +26,7 @@
         },
         inputs: 1,
         outputs: 1,
-        icon: "fa-file-code-o.png",
+        icon: "extract.png",
         label: function() {
             return this.name || "extract"
         },
@@ -49,10 +49,9 @@
                     value: option.url,
                 }).appendTo(row).typedInput({
                     default: "msg",
-                    types: ["str", "msg", "flow", "global"],
+                    types: ["str", "msg"],
                     typeField: "node-input-option-payloadTypeurl"
-                }).typedInput("type", option.payloadTypeurl)
-
+                }).typedInput('type', option.payloadTypeurl)
 
                 var finalspan = $("<div/>", {
                     style: "display:inline-block; width:5%;",
