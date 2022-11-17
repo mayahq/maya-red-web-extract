@@ -111,7 +111,7 @@ class Extract extends Node {
         for(let index = 0; index < urls.length; index++) {
             this.setStatus('PROGRESS', 'Requesting '+ urls[index].url);
             try{
-                if(/^(http(s):\/\/.)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/g.test(urls[index].url)) {
+                if(/^(http(s)?:\/\/.)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/g.test(urls[index].url)) {
                     let results = await getText(urls[index].url);
                     msg.payload["webExtract"].push(results);
                     this.setStatus("SUCCESS", `Parsed`);
