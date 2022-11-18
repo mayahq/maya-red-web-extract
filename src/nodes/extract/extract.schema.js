@@ -4,9 +4,8 @@ const {
     fields
 } = require('@mayahq/module-sdk')
 
-const https = require('follow-redirects').https;
-const url = require('url');
 const unfluff = require('unfluff');
+const got = require("got");
 
 const DEFAULT_PARSE = {
     title: "",
@@ -27,34 +26,24 @@ const DEFAULT_PARSE = {
     links: []
 }
 
-const makeHttpCall = async (options) => {
-	return new Promise((resolve) => {
-		var req = https.request(options, res => {
-			res.setEncoding('utf8');
-			var returnData = "";
-			res.on('data', chunk => {
-				returnData = returnData + chunk;
-			});
-			res.on('end', () => {
-				// let results = JSON.parse(returnData);
-				// resolve(results);
-				resolve(returnData);
-			});
-		});
-		if (options.method == 'POST' || options.method == 'PATCH') {
-			req.write(JSON.stringify(options.body));
-		}
-		req.end();
-	})
+const makeHttpCall = (options) => {
+
+    return new Promise((resolve, reject) => {
+        got(options).then(res => {
+            resolve(res.body)
+        }).catch(err => {
+            console.log("🚀 ~ file: extract.schema.js ~ line 37 ~ axios ~ err", err)
+            reject(err)
+        })
+    })
 }
 
 async function getText(urlString) {
 	try {
-		let parsed_url = url.parse(urlString);
+		// let parsed_url = url.parse(urlString);
 		let options = {
-			host: parsed_url.host,
-			path: parsed_url.path,
-			method: 'GET',
+			url: urlString,
+			method: 'get',
 			headers: {
 				'Content-Type': 'text/html',
 				'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36'
